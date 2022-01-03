@@ -4,8 +4,9 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
-import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
+import 'package:platform_maps_flutter/platform_maps_flutter.dart';
 
 class ClusterManager<T extends ClusterItem> {
   ClusterManager(this._items, this.updateMarkers,
@@ -34,8 +35,8 @@ class ClusterManager<T extends ClusterItem> {
   /// Precision of the geohash
   static final int precision = kIsWeb ? 12 : 20;
 
-  /// Google Maps map id
-  int? _mapId;
+  /// Maps controller
+  PlatformMapController? _controller;
 
   /// List of items
   Iterable<T> get items => _items;
@@ -47,10 +48,13 @@ class ClusterManager<T extends ClusterItem> {
   final double _maxLng = 180 - pow(10, -10.0) as double;
 
   /// Set Google Map Id for the cluster manager
-  void setMapId(int mapId, {bool withUpdate = true}) async {
-    _mapId = mapId;
-    _zoom = await GoogleMapsFlutterPlatform.instance.getZoomLevel(mapId: mapId);
-    if (withUpdate) updateMap();
+  void setController(PlatformMapController controller,
+      {bool withUpdate = true}) async {
+    _controller = controller;
+    _zoom = await controller.getZoomLevel();
+    if (withUpdate) {
+      updateMap();
+    }
   }
 
   /// Method called on map update to update cluster. Can also be manually called to force update.
@@ -89,10 +93,9 @@ class ClusterManager<T extends ClusterItem> {
 
   /// Retrieve cluster markers
   Future<List<Cluster<T>>> getMarkers() async {
-    if (_mapId == null) return List.empty();
+    if (_controller == null) return List.empty();
 
-    final LatLngBounds mapBounds = await GoogleMapsFlutterPlatform.instance
-        .getVisibleRegion(mapId: _mapId!);
+    final LatLngBounds mapBounds = await _controller!.getVisibleRegion();
 
     final LatLngBounds inflatedBounds = _inflateBounds(mapBounds);
 
@@ -206,5 +209,19 @@ class ClusterManager<T extends ClusterItem> {
     final data = await img.toByteData(format: ImageByteFormat.png) as ByteData;
 
     return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
+  }
+}
+
+extension _PlatformMapsControllerExtensions on PlatformMapController {
+  Future<double> getZoomLevel() async {
+    if (googleController != null) {
+      return await googleController!.getZoomLevel();
+    }
+
+    if (appleController != null) {
+      return await appleController!.getZoomLevel() ?? 0;
+    }
+
+    return 0;
   }
 }

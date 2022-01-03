@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:platform_maps_flutter/platform_maps_flutter.dart';
 
 void main() => runApp(MyApp());
 
@@ -32,7 +32,7 @@ class MapSampleState extends State<MapSample> {
   late ClusterManager _manager;
   late ClusterManager _manager2;
 
-  Completer<GoogleMapController> _controller = Completer();
+  Completer<PlatformMapController> _controller = Completer();
 
   Set<Marker> markers = Set();
   Set<Marker> markers2 = Set();
@@ -96,15 +96,15 @@ class MapSampleState extends State<MapSample> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: GoogleMap(
+      body: PlatformMap(
           zoomControlsEnabled: false,
           mapType: MapType.normal,
           initialCameraPosition: _parisCameraPosition,
           markers: markers..addAll(markers2),
-          onMapCreated: (GoogleMapController controller) {
+          onMapCreated: (PlatformMapController controller) {
             _controller.complete(controller);
-            _manager.setMapId(controller.mapId);
-            _manager2.setMapId(controller.mapId);
+            _manager.setController(controller);
+            _manager2.setController(controller);
           },
           onCameraMove: (position) {
             _manager.onCameraMove(position);

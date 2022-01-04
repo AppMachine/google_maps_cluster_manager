@@ -1,3 +1,5 @@
+# TODO: This README needs to be updated
+
 [![pub package](https://img.shields.io/pub/v/google_maps_cluster_manager.svg)](https://pub.dartlang.org/packages/google_maps_cluster_manager)
 
 # Flutter Cluster Manager for Google Maps

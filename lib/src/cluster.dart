@@ -1,4 +1,4 @@
-import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
+import 'package:platform_maps_cluster_manager/platform_maps_cluster_manager.dart';
 import 'package:platform_maps_flutter/platform_maps_flutter.dart';
 
 class Cluster<T extends ClusterItem> {

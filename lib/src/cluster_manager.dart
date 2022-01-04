@@ -5,7 +5,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
+import 'package:platform_maps_cluster_manager/platform_maps_cluster_manager.dart';
 import 'package:platform_maps_flutter/platform_maps_flutter.dart';
 
 class ClusterManager<T extends ClusterItem> {

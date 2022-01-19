@@ -9,7 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  platform_maps_flutter: ^1.0.2
+  platform_maps_flutter:
+    git: https://github.com/AppMachine/platform_maps_flutter.git
 
 
 dev_dependencies:

@@ -211,17 +211,3 @@ class ClusterManager<T extends ClusterItem> {
     return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
   }
 }
-
-extension _PlatformMapsControllerExtensions on PlatformMapController {
-  Future<double> getZoomLevel() async {
-    if (googleController != null) {
-      return await googleController!.getZoomLevel();
-    }
-
-    if (appleController != null) {
-      return await appleController!.getZoomLevel() ?? 0;
-    }
-
-    return 0;
-  }
-}
